@@ -13,22 +13,31 @@ function App() {
   return (
     <div className="container">
       <header>
-        <h1>Smart Expense Sharing</h1>
+        <h1>Expense Sharing</h1>
       </header>
       
-      <main>
-        <UserManagement onUsersChange={setUsers} />
+      <main className="main-layout">
+        <div className="column">
+          <div className="box">
+            <UserManagement onUsersChange={setUsers} />
+          </div>
+          
+          {users.length >= 2 && (
+            <div className="box">
+              <AddExpense users={users} onExpenseAdded={onUpdate} />
+            </div>
+          )}
+        </div>
         
-        {users.length >= 2 && (
-          <>
-            <AddExpense users={users} onExpenseAdded={onUpdate} />
+        <div className="column">
+          {users.length >= 2 ? (
             <Dashboard refresh={refresh} />
-          </>
-        )}
-        
-        {users.length === 1 && (
-          <p className="placeholder">Add one more user to start.</p>
-        )}
+          ) : (
+            <div className="box">
+              <p>Add people to start.</p>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   )
