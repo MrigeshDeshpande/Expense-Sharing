@@ -1,42 +1,41 @@
-const optimizeSettlements = (netBalances) => {
-  const usersWhoOwe = [];
-  const usersWhoAreOwed = [];
+const optimizeSettlements = (balances) => {
+  const debtors = [];
+  const creditors = [];
 
-  for (const [userId, balance] of Object.entries(netBalances)) {
-    if (balance > 0.01) {
-      usersWhoAreOwed.push({ id: userId, amount: balance });
-    } else if (balance < -0.01) {
-      usersWhoOwe.push({ id: userId, amount: Math.abs(balance) });
+  balances.forEach(b => {
+    if (b.netBalance > 0.01) {
+      creditors.push({ name: b.name, amount: b.netBalance });
+    } else if (b.netBalance < -0.01) {
+      debtors.push({ name: b.name, amount: Math.abs(b.netBalance) });
     }
-  }
+  });
 
-  usersWhoOwe.sort((a, b) => b.amount - a.amount);
-  usersWhoAreOwed.sort((a, b) => b.amount - a.amount);
+  debtors.sort((a, b) => b.amount - a.amount);
+  creditors.sort((a, b) => b.amount - a.amount);
 
   const transactions = [];
-  let oweIndex = 0;
-  let owedIndex = 0;
+  let i = 0, j = 0;
 
-  while (oweIndex < usersWhoOwe.length && owedIndex < usersWhoAreOwed.length) {
-    const payer = usersWhoOwe[oweIndex];
-    const receiver = usersWhoAreOwed[owedIndex];
+  while (i < debtors.length && j < creditors.length) {
+    const payer = debtors[i];
+    const payee = creditors[j];
 
-    const transferAmount = Math.min(payer.amount, receiver.amount);
-    const roundedAmount = Number(transferAmount.toFixed(2));
+    const amount = Math.min(payer.amount, payee.amount);
+    const fixedAmount = Number(amount.toFixed(2));
 
-    if (roundedAmount > 0) {
+    if (fixedAmount > 0) {
       transactions.push({
-        from: payer.id,
-        to: receiver.id,
-        amount: roundedAmount
+        from: payer.name,
+        to: payee.name,
+        amount: fixedAmount
       });
     }
 
-    payer.amount -= roundedAmount;
-    receiver.amount -= roundedAmount;
+    payer.amount = Number((payer.amount - fixedAmount).toFixed(2));
+    payee.amount = Number((payee.amount - fixedAmount).toFixed(2));
 
-    if (payer.amount < 0.01) oweIndex++;
-    if (receiver.amount < 0.01) owedIndex++;
+    if (payer.amount < 0.01) i++;
+    if (payee.amount < 0.01) j++;
   }
 
   return transactions;

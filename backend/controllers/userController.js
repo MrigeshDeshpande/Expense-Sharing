@@ -1,19 +1,21 @@
-const User = require('../models/User');
+const userService = require('../services/userService');
 
-exports.createUser = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
-    const user = await User.create(req.body);
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await User.find();
+    const users = await userService.getUsers();
     res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
+
+const createUser = async (req, res) => {
+  try {
+    const user = await userService.createUser(req.body.name);
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports = { getUsers, createUser };
