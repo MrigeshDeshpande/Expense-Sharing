@@ -51,7 +51,7 @@ h1, h2 {
   margin-bottom: 1.5rem;
 }
 
-input {
+input, select {
   padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid #d1d5db;
@@ -85,6 +85,45 @@ button:hover {
   border-radius: 8px;
   font-weight: 500;
   color: #374151;
+}
+
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+  background: #f9fafb;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.custom-splits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  background: #fffbeb;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+}
+
+.split-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.split-row input {
+  max-width: 80px;
 }
 
 .placeholder {
