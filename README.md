@@ -12,7 +12,6 @@ A full-stack MERN application for managing shared expenses with automated settle
 ## Design Decisions
 
 
-
 ### 1. Derived Balances vs. Persistent State
 We do **not** store net balances in the database. Instead, balances are computed on-the-fly by aggregating all expenses.
 - **Why**: This ensures data integrity and eventual consistency. Storing balances separately introduces the risk of "desync" (e.g., if an expense is deleted but the balance isn't updated). Computing from the source of truth (expenses) is more robust.
